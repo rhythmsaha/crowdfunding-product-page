@@ -1,4 +1,4 @@
-const PledgeCard = ({ name, pledge, description, items }) => {
+const ModalPledgeCard = ({ name, pledge, description, items }) => {
     const selectHadnler = () => {
         console.log("selected");
     };
@@ -41,4 +41,4 @@ const PledgeCard = ({ name, pledge, description, items }) => {
     );
 };
 
-export default PledgeCard;
+export default ModalPledgeCard;

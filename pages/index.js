@@ -4,18 +4,28 @@ import { useEffect, useState } from "react";
 import Card from "../components/Card";
 import Header from "../components/Header";
 import Hero from "../components/Hero";
+import Modal from "../components/Modal";
 import PledgeCard from "../components/PledgeCard";
 
 export default function Home() {
     const [bookMarked, setBookMarked] = useState(false);
     const [backed, setBacked] = useState(89914);
     const [backers, setBackers] = useState(5007);
+    const [modalOpen, setModalOpen] = useState(false);
 
     const [percent, setPercent] = useState(0);
 
     useEffect(() => {
         setPercent(Math.round((backed / 100000) * 100));
     }, [backed]);
+
+    useEffect(() => {
+        if (modalOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
+    }, [modalOpen]);
 
     const toggleBookmark = () => {
         setBookMarked((prev) => !prev);
@@ -48,7 +58,10 @@ export default function Home() {
                         </p>
 
                         <div className="flex space-x-2 lg:space-x-4 justify-center mt-4 lg:mt-8">
-                            <button className="bg-indigo-500 text-white rounded-full w-36 text-sm font-semibold lg:text-base lg:w-44">
+                            <button
+                                onClick={() => setModalOpen(true)}
+                                className="bg-indigo-500 text-white rounded-full w-36 text-sm font-semibold lg:text-base lg:w-44"
+                            >
                                 Back this project
                             </button>
                             <button
@@ -190,6 +203,8 @@ export default function Home() {
                     </div>
                 </Card>
             </div>
+
+            {modalOpen && <Modal />}
         </>
     );
 }
