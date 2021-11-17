@@ -1,6 +1,6 @@
-const PledgeCard = ({ name, pledge, description, items }) => {
+const PledgeCard = ({ name, pledge, description, items, id, onSelect }) => {
     const selectHadnler = () => {
-        console.log("selected");
+        onSelect(id);
     };
 
     return (
@@ -31,6 +31,7 @@ const PledgeCard = ({ name, pledge, description, items }) => {
                 </div>
 
                 <button
+                    onClick={selectHadnler}
                     className="text-white bg-indigo-500 disabled:bg-gray-500 px-4 py-2 lg:px-4 lg:py-3 rounded-full text-sm lg:text-base lg:font-semibold"
                     disabled={items <= 0}
                 >

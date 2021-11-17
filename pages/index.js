@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import Card from "../components/Card";
@@ -6,14 +6,16 @@ import Header from "../components/Header";
 import Hero from "../components/Hero";
 import Modal from "../components/Modal";
 import PledgeCard from "../components/PledgeCard";
+import SuccessModal from "../components/SuccessModal";
 
 export default function Home() {
     const [bookMarked, setBookMarked] = useState(false);
     const [backed, setBacked] = useState(89914);
     const [backers, setBackers] = useState(5007);
     const [modalOpen, setModalOpen] = useState(false);
-
     const [percent, setPercent] = useState(0);
+    const [selected, setSelected] = useState(0);
+    const [success, setSuccess] = useState(false);
 
     useEffect(() => {
         setPercent(Math.round((backed / 100000) * 100));
@@ -29,6 +31,26 @@ export default function Home() {
 
     const toggleBookmark = () => {
         setBookMarked((prev) => !prev);
+    };
+
+    const modalCloseHandler = () => {
+        setModalOpen(false);
+    };
+
+    const modalOpenHandler = () => {
+        setModalOpen(true);
+    };
+
+    const selectRewardHandler = (id) => {
+        setSelected(id);
+        setModalOpen(true);
+    };
+
+    const PaymentHandler = (amount) => {
+        setBackers((prev) => prev + 1);
+        setBacked(backed + amount);
+        setModalOpen(false);
+        setSuccess(true);
     };
 
     return (
@@ -59,7 +81,7 @@ export default function Home() {
 
                         <div className="flex space-x-2 lg:space-x-4 justify-center mt-4 lg:mt-8">
                             <button
-                                onClick={() => setModalOpen(true)}
+                                onClick={modalOpenHandler}
                                 className="bg-indigo-500 text-white rounded-full w-36 text-sm font-semibold lg:text-base lg:w-44"
                             >
                                 Back this project
@@ -182,6 +204,7 @@ export default function Home() {
                                 helped us launch our promotional campaign, and you will be added
                                 to a special Backer member list."
                                 items={101}
+                                onSelect={selectRewardHandler}
                             />
 
                             <PledgeCard
@@ -190,6 +213,7 @@ export default function Home() {
                                 pledge={75}
                                 description="You get a Black Special Edition computer stand and a personal thank you. You’ll be added to our Backer member list. Shipping is included."
                                 items={64}
+                                onSelect={selectRewardHandler}
                             />
 
                             <PledgeCard
@@ -198,13 +222,26 @@ export default function Home() {
                                 pledge={200}
                                 description="You get two Special Edition Mahogany stands, a Backer T-Shirt, and a personal thank you. You’ll be added to our Backer member list. Shipping is included."
                                 items={0}
+                                onSelect={selectRewardHandler}
                             />
                         </div>
                     </div>
                 </Card>
             </div>
 
-            {modalOpen && <Modal />}
+            <AnimatePresence>
+                {modalOpen && (
+                    <Modal
+                        onClose={modalCloseHandler}
+                        selected={selected}
+                        setSelected={setSelected}
+                        onPayment={PaymentHandler}
+                        success={success}
+                        setSuccess={setSuccess}
+                    />
+                )}
+                {success && <SuccessModal setSuccess={setSuccess} />}
+            </AnimatePresence>
         </>
     );
 }

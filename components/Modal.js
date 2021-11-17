@@ -1,13 +1,19 @@
-import { useEffect } from "react";
+import { motion } from "framer-motion";
 import ModalPledgeCard from "./ModalPledgeCard";
 
-const Modal = () => {
+const Modal = ({ onClose, selected, setSelected, onPayment }) => {
     return (
-        <div className="fixed top-0 left-0 right-0 bottom-0 bg-black  bg-opacity-60 z-50 flex justify-center items-start overflow-auto">
-            <div className="mt-24 bg-white p-8 mb-20 w-11/12 max-w-3xl">
+        <div className="fixed top-0 left-0 right-0 bottom-0 bg-black  bg-opacity-60 z-50 flex justify-center items-start overflow-auto noscroll">
+            <motion.div
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 1 }}
+                exit={{ opacity: 0, y: -50 }}
+                transition={{ duration: 0.25 }}
+                className="mt-24 rounded-md shadow-xl bg-white p-8 mb-20 w-11/12 max-w-3xl"
+            >
                 <div className="flex justify-between">
                     <h1 className="font-bold text-black">Back this project</h1>
-                    <span>
+                    <span onClick={onClose} className="cursor-pointer">
                         <svg
                             width="15"
                             height="15"
@@ -29,7 +35,15 @@ const Modal = () => {
 
                 <div className="mt-4 space-y-4">
                     <ModalPledgeCard
-                        dgeCard
+                        id="0"
+                        name="Pledge with no reward"
+                        pledge={1}
+                        description="Choose to support us without a reward if you simply believe in our project. As a backer, you will be signed up to receive product updats via email."
+                        selected={selected}
+                        setSelected={setSelected}
+                        onPayment={onPayment}
+                    />
+                    <ModalPledgeCard
                         id="1"
                         name="Bamboo Stand"
                         pledge={25}
@@ -37,6 +51,9 @@ const Modal = () => {
                     helped us launch our promotional campaign, and you will be added
                     to a special Backer member list."
                         items={101}
+                        selected={selected}
+                        setSelected={setSelected}
+                        onPayment={onPayment}
                     />
                     <ModalPledgeCard
                         id="2"
@@ -44,6 +61,9 @@ const Modal = () => {
                         pledge={75}
                         description="You get a Black Special Edition computer stand and a personal thank you. You’ll be added to our Backer member list. Shipping is included."
                         items={64}
+                        selected={selected}
+                        setSelected={setSelected}
+                        onPayment={onPayment}
                     />
 
                     <ModalPledgeCard
@@ -52,9 +72,12 @@ const Modal = () => {
                         pledge={200}
                         description="You get two Special Edition Mahogany stands, a Backer T-Shirt, and a personal thank you. You’ll be added to our Backer member list. Shipping is included."
                         items={0}
+                        selected={selected}
+                        setSelected={setSelected}
+                        onPayment={onPayment}
                     />
                 </div>
-            </div>
+            </motion.div>
         </div>
     );
 };
